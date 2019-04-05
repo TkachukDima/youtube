@@ -3,6 +3,16 @@ import './comments.css';
 
 export default class Comments extends Component {
 
+  formatDate(date) {
+    let different = (new Date() - new Date(date))/1000 ;
+    if(different < 3600) return Math.floor(different/60) + ' minutes ago';
+    if(different < 24*3600) return Math.floor(different/(60*60)) + ' hours ago';
+    if(different < 30*24*3600) return Math.floor(different/(24*60*60)) + ' days ago';
+    if(different < 12*30*24*3600) return Math.floor(different/(30*24*60*60)) + ' months ago';
+
+    return 'more than a year ago';
+  }
+
   render() {
     
     const {arrComments} = this.props;
@@ -19,7 +29,7 @@ export default class Comments extends Component {
                name={idAuthorChannel} > 
                 {authorDisplayName}
                   <span name="date" className="comment-published-at">
-                    {publishedAt}
+                    {this.formatDate(publishedAt)}
                   </span>
             </p>
             <p name="commentBody" className="comment-body">{commentBody}</p>
