@@ -1,131 +1,156 @@
 import React, { Component } from 'react';
+
 import './app.css';
 import Player from '../player/player';
 import Search from '../search/search';
 import VideoList from '../videolist/videolist';
 import ServiceApi from '../service/service';
 import Comments from '../comments/comments';
-import MyLoadingComponent from '../my-loading-component/my-loading-component';
+import NotFound from '../not-found/not-found';
+import MyLoadingPlayer from '../my-loading-component/my-loading-player';
+import Error from '../error/error';
+
+import { connect } from 'react-redux';
+import * as actions from '../store/actions';
 
 class App extends Component {
 
   serviceApi = new ServiceApi();
-  idMainVideo = "ppOFiX-T_yM";
-  state = {
-      comments: false,
-      videoList: false,
-      idMainVideo: "ppOFiX-T_yM",
-      infoMainVideo: null,
-      titleMainVideo: '',
-      channelTitleMainVideo: '',
-      imgUrlMainVideo: '',
-      publishedAt: ''
+
+  componentWillMount() {
+    this.getVideoListInfo();
+  }
+
+  getInfoMainVideo = (id = this.props.idMainVideo) => {
+    return this.serviceApi.getInfoMainVideo(id).catch( this.onError );
   };
 
-  getInfoMainVideo = (id = this.state.idMainVideo) => {
-    return this.serviceApi.getInfoMainVideo(id);
+  getCommentsVideo = (id = this.props.idMainVideo) => {
+    return this.serviceApi.getComments(id).catch( this.onError );
   };
 
   getVideoListInfo = async () => {
     const mainVideo = await this.getInfoMainVideo();
     const comm = await this.getCommentsVideo();
-    this.serviceApi.getRelatedVideo(this.state.idMainVideo)
+    this.serviceApi.getRelatedVideo(this.props.idMainVideo)
         .then( (res) => {
-          this.setState({
-            comments: comm,
-            infoMainVideo: mainVideo[0],
-            videoList: res
-          })
-        });
-   
-    
+          const obj = {
+              comments: comm,
+              infoMainVideo: mainVideo[0],
+              videoList: res,
+              loading: false,
+              searchResult: false
+            };
+            this.props.loadingFirstPage(obj);
+        })
+        .catch( this.onError );
   };
 
+  onError = (err) => {
+      console.log("ERRRRRRROOOOOOOR", err);
+      const errObj = {
+        error: true,
+        loading: false
+      };
+      this.props.loadingErrorPage(errObj);
+   }
+
  onPlayThisVideo = async (id) => {
-    console.log(id);
-    
     const comm = await this.getCommentsVideo(id);
     const mainVideo = await this.getInfoMainVideo(id);
     this.serviceApi.getRelatedVideo(id)
           .then( (res) => {
-              
-              this.setState({
+              const obj = {
                 comments: comm,
                 videoList: res,
                 idMainVideo: id,
-                infoMainVideo: mainVideo[0]
-              })
+                infoMainVideo: mainVideo[0],
+                loading: false,
+                searchResult: false
+              };
+              this.props.playThisVideo(obj);
           })
-          // .then( () => this.getCommentsVideo(id) )
-  };
+          .catch( this.onError );
+ };
 
   searchVideos = (text) => {
       this.serviceApi.getSearchVideo(text)
             .then( async (res) => {
-                const [{id, title, channelTitle, imgUrl, publishedAt}, ...rest] = res;
-                const comm = await this.getCommentsVideo(id);
-                const mainVideo = await this.getInfoMainVideo(id);
-                this.setState(
-                  {
-                    comments: comm,
-                    videoList: rest,
-                    idMainVideo: id,
-                    infoMainVideo: mainVideo[0],
-                    titleMainVideo: title,
-                    channelTitleMainVideo: channelTitle,
-                    imgUrlMainVideo: imgUrl,
-                    publishedAt: publishedAt
-                  }
-                )
-
-
+                // console.log(res);
+                if(res.length) {
+                  const [{id, title, channelTitle, imgUrl, publishedAt}, ...rest] = res;
+                  const comm = await this.getCommentsVideo(id);
+                  const mainVideo = await this.getInfoMainVideo(id);
+                  const obj = {
+                        comments: comm,
+                        videoList: rest,
+                        idMainVideo: id,
+                        infoMainVideo: mainVideo[0],
+                        titleMainVideo: title,
+                        channelTitleMainVideo: channelTitle,
+                        imgUrlMainVideo: imgUrl,
+                        publishedAt: publishedAt,
+                        loading: false,
+                        searchResult: false
+                      }; 
+                      this.props.searchVideoContent(obj);
+                } else {
+                      this.props.notFoundVideoContent({searchResult: true});
+                }
             } )
-
+            .catch( this.onError );
   }
-
-  getCommentsVideo = (id = this.state.idMainVideo) => {
-    return this.serviceApi.getComments(id);
-    
-  };
-
-  componentDidMount() {
-    console.log('Will!')
-    this.getInfoMainVideo();
-    this.getVideoListInfo();
-  }
-
- 
 
  render() {
-    // console.log(this.state);
     
+    const {loading, searchResult, error, idMainVideo, infoMainVideo, videoList, comments } = this.props;
+    const loadingSpinner = loading ? < MyLoadingPlayer /> : null ;
+    const search = searchResult ? <NotFound /> : null;
+    const errorPage = error ? <Error /> : null;
+
+    const player = ( loading || error ) ? null : <Player  idMainVideo={idMainVideo} 
+                                                          infoMainVideo={infoMainVideo} /> ;
+    
+    const allVideoList = ( loading || error ) ? null : <VideoList getVideoList={this.getVideoListInfo} 
+                                                                  videoList={videoList}
+                                                                  onPlayThisVideo={this.onPlayThisVideo} /> ;
+    
+    const allComments = ( loading || error ) ? null : <Comments arrComments={comments} /> ;
 
     return (
       <div className="container">
-        <div className="row">
-          <div className="col-md-12 header" id="search">
-                  <div className="search">
-                    <Search searchVideos={this.searchVideos} />
-                  </div>
+        <div className="content">
+              <div className="search">
+                      <Search searchVideos={this.searchVideos} />
+              </div>
+              <div className="search-result">
+                {search}
+              </div>
+              <div className="error-block">
+                 {errorPage}
+              </div>
+              <div>
+                {loadingSpinner}
+              </div>
+          <div className="wrapper">
+              <div className="mainVideo">
+                {player}
+              </div>
+              <div className="videosList">
+                  {allVideoList}
+              </div>
+              <div className="comments">
+                    {allComments}
+              </div>
           </div>
         </div>
-        <div className="row content">
-          <div className="col-md-8" id="col-left">
-                { this.state.infoMainVideo?<Player idMainVideo={this.state.idMainVideo} infoMainVideo={this.state.infoMainVideo} /> : <MyLoadingComponent idMainVideo={this.state.idMainVideo} />  }
-                
-                <Comments arrComments={this.state.comments} />
-                <div id ="comments">Comments</div>
-          </div>
-          <div className="col-md-4" id="col-right">
-              <VideoList getVideoList={this.getVideoListInfo}
-                         videoList={this.state.videoList}
-                         onPlayThisVideo={this.onPlayThisVideo} />
-          </div>
-        </div>
-      
       </div>
   );
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return state;
+};
+
+export default connect(mapStateToProps, actions)(App);

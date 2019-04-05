@@ -1,0 +1,96 @@
+.title {
+  padding: 20px 0 12px 0;
+  border-bottom: solid 1px lightgray;
+}
+
+.title-video {
+  font-family: Roboto, Arial, sans-serif;
+  font-weight: 400;
+  color: #0a0a0a;
+  font-size: 18px;
+}
+
+.viewCount {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.viewCount div {
+  text-align: center;
+  font-family: Roboto, Arial, sans-serif;
+  font-weight: 400;
+  color: #0a0a0a;
+  font-size: 16px;
+}
+
+.video-description img {
+  float: left;
+  height: 70px;
+  width: 70px;
+
+  border-radius: 35px;
+
+}
+
+.video-description {
+  padding: 10px 0;
+  border-bottom: solid 1px lightgray;
+}
+
+.video-description div {
+
+}
+
+.video-description .channel-title {
+  font-family: Roboto, Arial, sans-serif;
+  font-weight: bold;
+  color: #0a0a0a;
+  font-size: 0.9em;
+  padding-left: 80px;
+  margin-top: 15px;
+}
+
+.video-description .published-at {
+  font-family: Roboto, Arial, sans-serif;
+  font-weight: 400;
+  color: #606060;
+  font-size: 0.8em;
+  padding-left: 80px;
+  margin-bottom: 15px; 
+}
+
+.video-description .description {
+  padding-left: 80px;
+}
+
+.video {
+  position:relative;
+  padding-bottom:56.25%;
+  padding-top:25px;
+  height:0;
+
+
+}
+
+iframe {
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  /* max-width: 780px;
+  max-height: 405px; */
+}
+
+.comment-count {
+  margin: 10px 0 0 0;
+  padding-top: 10px;
+  font-family: Roboto, Arial, sans-serif;
+  font-weight: 300;
+  color: #0a0a0a;
+  font-size: 16px; 
+  border-top: 1px solid lightgray;
+}
+
+
+

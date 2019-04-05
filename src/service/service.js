@@ -1,9 +1,7 @@
+
 export default class ServiceApi {
   
-  state ={
-    query: "хонда і мазда"
   
-  } 
   _apiBase = `https://www.googleapis.com/youtube/v3/`;
   apiKey = "AIzaSyAiEW0F1_5qY_4SEzzZgiL3arhqy-JMHxo";
   // apiKey = `AIzaSyB8iK4YxBReDeESrJTijh8XpzvbQY91wzw`;
@@ -14,7 +12,12 @@ export default class ServiceApi {
  
 
   async getResourse(url) {
-    const res =await fetch(`${this._apiBase}${url}`);
+    const res = await fetch(`${this._apiBase}${url}`);
+    
+    if (!res.ok) {
+      throw new Error(`Could not fetch ${url}, received ${res.status}`)
+    }
+    
     return await res.json();
   };
 
@@ -32,6 +35,8 @@ export default class ServiceApi {
   async getSearchVideo(value) {
       const searchVideos = await this.getResourse(`${this.urlSearch}${value}`);
       const arrSearchVideos = await searchVideos.items;
+      console.log(arrSearchVideos);
+     
       return this._transformDataVideo(arrSearchVideos); 
   };
 
@@ -83,7 +88,7 @@ export default class ServiceApi {
         id: el.id.videoId,
         title: el.snippet.title,
         channelTitle: el.snippet.channelTitle,
-        imageUrl: el.snippet.thumbnails.default.url,
+        imageUrl: el.snippet.thumbnails.medium.url,
         channelId: el.snippet.channelId,
         publishedAt: el.snippet.publishedAt
       };

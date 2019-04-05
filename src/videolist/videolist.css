@@ -1,0 +1,40 @@
+.img-video {
+  float: left;
+  
+}
+
+.img-video img {
+  height: 100px;
+  cursor: pointer;
+}
+
+.name-video {
+  font-size: 10px;
+}
+
+.name-video h3 {
+  margin-left: 185px;
+  font-family: Roboto, Arial, sans-serif;
+  font-weight: bold;
+  color: #0a0a0a;
+  font-size: 1.17em;
+  cursor: pointer;
+  
+ 
+}
+
+.name-channel {
+  margin-left: 185px;
+  font-family: Roboto, Arial, sans-serif;
+  font-weight: 400;
+  color: #606060;
+  font-size: 0.8em;
+  cursor: pointer;
+  
+}
+
+.list-group-item {
+  padding: 0 0 20px 0;
+  border: none;
+}
+

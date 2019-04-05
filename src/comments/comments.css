@@ -1,0 +1,42 @@
+.comment {
+  margin-bottom: 25px;
+}
+
+.comment img {
+  float: left;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+}
+
+.comment p {
+  padding-left: 55px;
+}
+
+.comment .comment-author {
+  font-family: Roboto, Arial, sans-serif;
+  font-weight: bold;
+  color: #0a0a0a;
+  font-size: 12px;
+  margin-bottom: 0px;
+}
+
+.comment .comment-published-at {
+  padding-left: 10px;
+  font-family: Roboto, Arial, sans-serif;
+  font-weight: 400;
+  color: #606060;
+  font-size: 12px;
+}
+
+.comment .commentBody {
+  font-family: Roboto, Arial, sans-serif;
+  font-weight: 500;
+  color: #0a0a0a;
+  font-size: 12px;
+   
+}
+
+.no-comments {
+  font-weight: 600;
+}
