@@ -13,8 +13,9 @@ class Search extends Component {
       e.preventDefault();
       const textSearch = this.props.label.split(' ').join('+');
       if(textSearch.length) {
-        this.props.searchVideos(textSearch);
         this.props.onChangeInputLabel("");
+        this.props.searchVideos(textSearch);
+        
       }
   }
   

@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import './comments.css';
+import { connect } from 'react-redux';
 
-export default class Comments extends Component {
+ class Comments extends Component {
 
   formatDate(date) {
     let different = (new Date() - new Date(date))/1000 ;
@@ -15,12 +16,12 @@ export default class Comments extends Component {
 
   render() {
     
-    const {arrComments} = this.props;
+    const {comments} = this.props;
     // console.log(arrComments);
     let itemComments = null;
     
-    if(arrComments.length) {
-      itemComments = arrComments.map( (el) => {
+    if(comments.length) {
+      itemComments = comments.map( (el) => {
         const {idComment, idAuthorChannel, commentBody, authorDisplayName, authorProfileImageUrl, publishedAt} = el;
         return (
           <div key={idComment} className="comment">
@@ -45,3 +46,9 @@ export default class Comments extends Component {
     );
   };
 };
+
+const mapStateToProps = (state) => ({
+  comments : state.comments
+});
+
+export default connect(mapStateToProps)(Comments);

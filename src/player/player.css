@@ -37,10 +37,6 @@
   border-bottom: solid 1px lightgray;
 }
 
-.video-description div {
-
-}
-
 .video-description .channel-title {
   font-family: Roboto, Arial, sans-serif;
   font-weight: bold;
@@ -72,7 +68,7 @@
 
 }
 
-iframe {
+.video iframe {
   position:absolute;
   top:0;
   left:0;

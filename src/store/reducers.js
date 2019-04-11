@@ -3,7 +3,8 @@ import {ACTION_LOADING_FIRST_PAGE,
         ACTION_ON_PLAY_THIS_VIDEO, 
         ACTION_SEARCH_VIDEO,
         ACTION_NOT_FOUND_VIDEO,
-        ACTION_CHANGE_LABEL} from './actions';
+        ACTION_CHANGE_LABEL,
+        ACTION_LOADIN_SPINNER} from './actions';
 
 
 
@@ -51,6 +52,12 @@ export const reducer = (state = initialState, action) => {
           return {
                 ...state, 
                 label: action.payload                  
+          };
+
+      case ACTION_LOADIN_SPINNER :
+          return {
+                ...state, 
+                loading: action.payload                  
           };
 
       default:

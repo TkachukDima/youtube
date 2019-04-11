@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 
 import './player.css';
+import { connect } from 'react-redux';
 
 class Player extends Component {
-  
+ 
   transformDate(datePublished) {
     const months = ["January",
                     "February", 
@@ -38,7 +39,7 @@ class Player extends Component {
          publishedAt,
          description,
          commentCount} = infoMainVideo;
- 
+  
   return (
       <div className="main-player">
           <div id="video" className="video">
@@ -70,11 +71,10 @@ class Player extends Component {
               <img src={imageUrl} alt={channelTitle} />
               <div className="channel-title">{channelTitle}</div>
               <div className="published-at">Published on {this.transformDate(publishedAt)}</div>
-                           
               <div className="description">
                 {description}
               </div>
-              <div className="comment-count">
+             <div className="comment-count">
                 Comments: {commentCount} 
               </div>
             </div>
@@ -85,4 +85,6 @@ class Player extends Component {
   }
 }
 
-export default Player;
+const mapStateToProps = (state) => state;
+
+export default connect(mapStateToProps)(Player);

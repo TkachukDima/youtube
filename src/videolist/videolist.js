@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import './videolist.css';
-
-export default class VideoList extends Component {
+import { connect } from 'react-redux';
+import * as actions from '../store/actions';
+ 
+class VideoList extends Component {
   
   truncate(str, maxlength) {
     return (str.length > maxlength) ? str.slice(0, maxlength - 3) + "..." : str ;
@@ -44,4 +46,8 @@ export default class VideoList extends Component {
         </div>
       );
   };
-}
+};
+
+const mapStateToProps = (state) => state;
+
+export default connect(mapStateToProps, actions)(VideoList);
